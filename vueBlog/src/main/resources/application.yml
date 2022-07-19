@@ -1,0 +1,16 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    #应用名称
+    name: myBlog
+  datasource:
+    druid:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      url: jdbc:mysql://8.130.27.140:3306/vueblog?useUnicode=true&useSSL=false&characterEncoding=utf8&serverTimezone=Asia/Shanghai
+      username: root
+      password: yYx05240017kj
+
+mybatis-plus:
+  mapper-locations: classpath*:/mapper/**Mapper.xml
