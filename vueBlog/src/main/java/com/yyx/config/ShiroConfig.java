@@ -46,6 +46,7 @@ public class ShiroConfig {
 
     @Bean
     public SessionManager sessionManager(RedisSessionDAO redisSessionDAO) {
+
         DefaultWebSessionManager sessionManager = new DefaultWebSessionManager();
 
         // inject redisSessionDAO
@@ -55,6 +56,7 @@ public class ShiroConfig {
 
     @Bean
     public SessionsSecurityManager securityManager(AccountRealm accountRealm, SessionManager sessionManager, RedisCacheManager redisCacheManager) {
+
         DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager(accountRealm);
 
         //inject sessionManager
