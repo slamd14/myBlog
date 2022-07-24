@@ -8,6 +8,7 @@ import com.yyx.common.lang.Result;
 import com.yyx.entity.Blog;
 import com.yyx.service.BlogService;
 import com.yyx.util.ShiroUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,7 @@ import java.time.LocalDateTime;
  * @author slamd14
  * @since 2022-07-19
  */
+@Slf4j
 @RestController
 @RequestMapping
 public class BlogController {
@@ -33,6 +35,7 @@ public class BlogController {
 
     @GetMapping("/blogs")
     public Result list(@RequestParam(defaultValue = "1") Integer currentPage){
+        log.info("来了");
         Page<Blog> blogPage = new Page<Blog>(currentPage,5);
         LambdaQueryWrapper<Blog> qw = new LambdaQueryWrapper<>();
         qw.orderByDesc(Blog::getCreated);
