@@ -10,7 +10,8 @@
     {
       "name": "yyx.jwt.expire",
       "type": "java.lang.Long",
-      "sourceType": "com.yyx.util.JwtUtils"
+      "sourceType": "com.yyx.util.JwtUtils",
+      "defaultValue": 0
     },
     {
       "name": "yyx.jwt.header",
