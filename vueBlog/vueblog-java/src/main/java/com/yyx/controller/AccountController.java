@@ -9,6 +9,7 @@ import com.yyx.common.lang.Result;
 import com.yyx.entity.User;
 import com.yyx.service.UserService;
 import com.yyx.util.JwtUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletResponse;
 
+@Slf4j
 @RestController
 public class AccountController {
 
@@ -39,9 +41,10 @@ public class AccountController {
             return Result.fail("密码不正确");
         }
         String jwt = jwtUtils.generateToken(user.getId());
-        response.setHeader("Authorization",jwt);//TODO 把jwt放在响应头里返回，客户端收到响应头了会缓存jwt到cookie里吗
+        response.setHeader("Authorization",jwt);//TODO 把jwt放在响应头里返回，客户端收到响应头了会缓存jwt到cookie里吗--->应该是由前端处理，而不是浏览器自发帮我们做这件事(笑哭)
         response.setHeader("Access-control-Expose-Headers","Authorization");
         //return Result.succ(null);
+        log.info("用户{}登录成功!",loginDto.getUsername());//TODO debug
         return Result.succ(MapUtil.builder()
                 .put("id",user.getId())
                 .put("username",user.getUsername())

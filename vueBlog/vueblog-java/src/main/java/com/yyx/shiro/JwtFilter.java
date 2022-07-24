@@ -4,10 +4,10 @@ import com.alibaba.druid.support.json.JSONUtils;
 import com.yyx.common.lang.Result;
 import com.yyx.util.JwtUtils;
 import io.jsonwebtoken.Claims;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authc.ExpiredCredentialsException;
-import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.web.filter.authc.AuthenticatingFilter;
 import org.apache.shiro.web.util.WebUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+@Slf4j
 @Component
 public class JwtFilter extends AuthenticatingFilter {
 
@@ -52,12 +53,15 @@ public class JwtFilter extends AuthenticatingFilter {
      */
     @Override
     protected boolean onAccessDenied(ServletRequest servletRequest, ServletResponse servletResponse) throws Exception {
+        log.info("onAccessDenied");
         HttpServletRequest request=(HttpServletRequest) servletRequest;
         String jwt = request.getHeader("Authorization");
         if(jwt==null||jwt.length()==0){
+            log.info("没收到jwt");//TODO debug
             return true;//放行，比如游客，就不携带jwt
         }else{
             //校验jwt
+            log.info("收到jwt");//TODO debug
             Claims claim = jwtUtils.getClaimByToken(jwt);
             if(claim==null || jwtUtils.isTokenExpired(claim.getExpiration())){ //null表示出异常，expired表示已过期
                 throw new ExpiredCredentialsException("token已失效，请重新登录");
