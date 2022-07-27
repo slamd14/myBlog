@@ -35,7 +35,6 @@ public class BlogController {
 
     @GetMapping("/blogs")
     public Result list(@RequestParam(defaultValue = "1") Integer currentPage){
-        log.info("来了");
         Page<Blog> blogPage = new Page<Blog>(currentPage,5);
         LambdaQueryWrapper<Blog> qw = new LambdaQueryWrapper<>();
         qw.orderByDesc(Blog::getCreated);

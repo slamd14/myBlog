@@ -3,6 +3,7 @@ package com.yyx.shiro;
 import com.yyx.entity.User;
 import com.yyx.service.UserService;
 import com.yyx.util.JwtUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
@@ -11,6 +12,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+@Slf4j
 @Component
 public class AccountRealm extends AuthorizingRealm {
 
@@ -42,6 +44,7 @@ public class AccountRealm extends AuthorizingRealm {
      */
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authenticationToken) throws AuthenticationException {
+        log.info("=============进入认证============");
         JwtToken jwtToken=(JwtToken) authenticationToken;
         String userId = jwtUtils.getClaimByToken((String) jwtToken.getPrincipal()).getSubject();//shiro收到的是token，token携带jwt，解析得到id
         User user = userService.getById(Long.valueOf(userId));

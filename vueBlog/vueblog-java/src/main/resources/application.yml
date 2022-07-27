@@ -14,7 +14,7 @@ spring:
   redis:
     host: 8.130.27.140:6379
     password: gxZFGkqZRUqW4CZV
-    database: 1   #操作的是0号数据库
+    database: 1   #操作的是1号数据库
 mybatis-plus:
   mapper-locations: classpath*:/mapper/**Mapper.xml
 

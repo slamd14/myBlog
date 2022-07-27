@@ -12,6 +12,7 @@ import com.yyx.util.JwtUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,6 +21,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletResponse;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Slf4j
 @RestController
@@ -58,6 +61,33 @@ public class AccountController {
     @GetMapping("/logout")
     public Result logout(){
         SecurityUtils.getSubject().logout();
+        return Result.succ(null);
+    }
+
+    @PostMapping("/register")
+    public Result register(@RequestBody LoginDto loginDto){
+        String username = loginDto.getUsername().trim();//去掉字符串两侧的空格
+        String password = loginDto.getPassword().trim();
+        String md5Pass = SecureUtil.md5(password);
+        User user = new User();
+        user.setUsername(username);
+        user.setPassword(md5Pass);
+        user.setCreated(LocalDateTime.now());
+        user.setAvatar("https://image-1300566513.cos.ap-guangzhou.myqcloud.com/upload/images/5a9f48118166308daba8b6da7e466aab.jpg");
+        user.setStatus(0);
+        userService.save(user);
+        return Result.succ(null);
+    }
+
+    @RequiresAuthentication
+    @PostMapping("/editPersonalMes")
+    public Result editPersonalMes(@RequestBody User user){
+        User oldUser = userService.getById(user.getId());
+        if((user.getPassword()!=null)){
+            user.setPassword(SecureUtil.md5(user.getPassword()));
+        }
+        BeanUtils.copyProperties(user,oldUser);
+        userService.updateById(oldUser);
         return Result.succ(null);
     }
 }
